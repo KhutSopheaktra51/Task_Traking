@@ -1,0 +1,13 @@
+<?php
+verifyCsrf();
+$id = (int) ($_POST['id'] ?? 0);
+$status = $_POST['status'] ?? '';
+$allowed = ['todo', 'in_progress', 'in_review', 'blocked', 'done'];
+
+if ($id && in_array($status, $allowed)) {
+    updateTaskStatus($id, $status);
+    echo json_encode(['success' => true]);
+} else {
+    http_response_code(422);
+    echo json_encode(['error' => 'Invalid input']);
+}
