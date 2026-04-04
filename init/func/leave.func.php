@@ -4,14 +4,12 @@
 function getMyLeaves($user_id)
 {
     return getRows(
-        'SELECT * FROM leave_requests
-         WHERE user_id = ?
-         ORDER BY created_at DESC',
+        'SELECT * FROM leave_requests WHERE user_id = ? ORDER BY created_at DESC',
         [$user_id]
     );
 }
 
-// ---- Get all pending leave requests ----
+// ---- Get all pending leaves ----
 function getPendingLeaves()
 {
     return getRows(
@@ -23,7 +21,7 @@ function getPendingLeaves()
     );
 }
 
-// ---- Submit leave request ----
+// ---- Submit leave ----
 function createLeave($user_id, $type, $start, $end, $reason)
 {
     return runQuery(
@@ -37,9 +35,7 @@ function createLeave($user_id, $type, $start, $end, $reason)
 function updateLeaveStatus($id, $status, $approved_by)
 {
     return runQuery(
-        'UPDATE leave_requests
-         SET status = ?, approved_by = ?
-         WHERE id = ?',
+        'UPDATE leave_requests SET status = ?, approved_by = ? WHERE id = ?',
         [$status, $approved_by, $id]
     );
 }

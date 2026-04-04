@@ -1,5 +1,5 @@
 <?php
-$page_title = 'My Attendance History';
+$page_title = 'Attendance History';
 $records = getUserAttendance(loggedInUser()['id']);
 ?>
 
@@ -30,10 +30,10 @@ $records = getUserAttendance(loggedInUser()['id']);
                         <?= date('D, M j, Y', strtotime($r['date'])) ?>
                     </td>
                     <td class="px-5 py-3 text-gray-600">
-                        <?= $r['check_in'] ? e(substr($r['check_in'], 0, 5)) : '—' ?>
+                        <?= $r['check_in'] ? substr($r['check_in'], 0, 5) : '—' ?>
                     </td>
                     <td class="px-5 py-3 text-gray-600">
-                        <?= $r['check_out'] ? e(substr($r['check_out'], 0, 5)) : '—' ?>
+                        <?= $r['check_out'] ? substr($r['check_out'], 0, 5) : '—' ?>
                     </td>
                     <td class="px-5 py-3">
                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium

@@ -1,14 +1,12 @@
 <?php $me = loggedInUser(); ?>
 
 <!-- Sidebar -->
-<aside class="w-64 bg-white border-r border-gray-200 flex flex-col flex-shrink-0">
+<aside class="w-64 bg-white border-r border-gray-200 flex flex-col flex-shrink-0 min-h-screen">
 
-    <!-- Logo -->
     <div class="h-16 flex items-center px-6 border-b border-gray-200">
         <span class="text-xl font-bold text-indigo-600">TaskTrack</span>
     </div>
 
-    <!-- Nav links -->
     <nav class="flex-1 p-3 space-y-1">
         <?php
         $nav = [
@@ -27,7 +25,6 @@
             </a>
         <?php endforeach; ?>
 
-        <!-- Manager and Admin only -->
         <?php if (isManagerOrAdmin()): ?>
             <div class="pt-4 pb-1 px-3 text-xs font-bold text-gray-400 uppercase">
                 Management
@@ -43,7 +40,6 @@
             </a>
         <?php endif; ?>
 
-        <!-- Admin only -->
         <?php if (isAdmin()): ?>
             <div class="pt-4 pb-1 px-3 text-xs font-bold text-gray-400 uppercase">
                 Admin
@@ -56,21 +52,15 @@
 
 </aside>
 
-<!-- Main content area -->
-<div class="flex-1 flex flex-col min-w-0">
+<!-- Main content -->
+<div class="flex-1 flex flex-col min-w-0 min-h-screen">
 
-    <!-- Top bar with user profile and logout on right -->
-    <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
-
-        <!-- Page title -->
+    <!-- Topbar -->
+    <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 flex-shrink-0">
         <h1 class="text-lg font-semibold text-gray-800">
             <?= e($page_title ?? 'TaskTrack') ?>
         </h1>
-
-        <!-- Right side — user + logout -->
         <div class="flex items-center gap-4">
-
-            <!-- Avatar + name + role -->
             <div class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center
                             text-indigo-700 text-xs font-bold">
@@ -81,13 +71,9 @@
                     <p class="text-xs text-gray-400"><?= ucfirst(e($me['role'])) ?></p>
                 </div>
             </div>
-
-            <!-- Divider -->
             <div class="w-px h-6 bg-gray-200"></div>
-
-            <!-- Logout -->
-            <a href="./?page=logout" class="flex items-center gap-1.5 text-sm text-red-500 hover:text-red-700
-                      font-medium transition-colors">
+            <a href="./?page=logout"
+                class="flex items-center gap-1.5 text-sm text-red-500 hover:text-red-700 font-medium">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

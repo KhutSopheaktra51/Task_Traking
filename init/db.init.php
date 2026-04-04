@@ -1,25 +1,34 @@
 <?php
 
 // ---- Database settings ----
-$db_host = '127.0.0.1';
+$db_host = 'localhost';
 $db_name = 'tasktrack';
 $db_user = 'root';
 $db_pass = '';
 
-// ---- Connect to database (only connects once) ----
+// ---- Connect to database ----
 function db()
 {
     global $db_host, $db_name, $db_user, $db_pass;
     static $conn = null;
-
     if ($conn === null) {
-        $conn = new PDO(
-            "mysql:host=$db_host;dbname=$db_name;charset=utf8mb4",
-            $db_user,
-            $db_pass
-        );
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        try {
+            $conn = new PDO(
+                "mysql:host=$db_host;dbname=$db_name;charset=utf8mb4",
+                $db_user,
+                $db_pass
+            );
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            die('
+                <div style="font-family:sans-serif;padding:40px;text-align:center">
+                    <h2 style="color:red">Database Connection Failed</h2>
+                    <p>' . $e->getMessage() . '</p>
+                    <p>Please make sure MySQL is running in XAMPP</p>
+                </div>
+            ');
+        }
     }
 
     return $conn;

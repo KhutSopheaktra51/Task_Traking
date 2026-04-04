@@ -5,7 +5,9 @@ $requests = getPendingLeaves();
 
 <div class="mb-6">
     <h1 class="text-2xl font-semibold text-gray-900">Pending leave requests</h1>
-    <p class="text-sm text-gray-500 mt-1"><?= count($requests) ?> pending</p>
+    <p class="text-sm text-gray-500 mt-1">
+        <?= count($requests) ?> pending
+    </p>
 </div>
 
 <?php if (empty($requests)): ?>
@@ -25,14 +27,25 @@ $requests = getPendingLeaves();
                             <?= e(getInitials($r['user_name'])) ?>
                         </div>
                         <div>
-                            <p class="text-sm font-semibold text-gray-800"><?= e($r['user_name']) ?></p>
-                            <p class="text-sm text-gray-600 mt-0.5">
-                                <span class="font-medium"><?= ucfirst($r['type']) ?> leave</span>
-                                — <?= date('M j', strtotime($r['start_date'])) ?>
-                                to <?= date('M j, Y', strtotime($r['end_date'])) ?>
-                                <span class="text-gray-400">(<?= $days ?> day<?= $days > 1 ? 's' : '' ?>)</span>
+                            <p class="text-sm font-semibold text-gray-800">
+                                <?= e($r['user_name']) ?>
                             </p>
-                            <p class="text-xs text-gray-400 mt-1"><?= e($r['reason']) ?></p>
+                            <p class="text-sm text-gray-600 mt-0.5">
+                                <span class="font-medium">
+                                    <?= ucfirst($r['type']) ?> leave
+                                </span>
+                                —
+                                <?= date('M j', strtotime($r['start_date'])) ?>
+                                to
+                                <?= date('M j, Y', strtotime($r['end_date'])) ?>
+                                <span class="text-gray-400">(
+                                    <?= $days ?> day
+                                    <?= $days > 1 ? 's' : '' ?>)
+                                </span>
+                            </p>
+                            <p class="text-xs text-gray-400 mt-1">
+                                <?= e($r['reason']) ?>
+                            </p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2 flex-shrink-0">

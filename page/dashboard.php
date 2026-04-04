@@ -5,8 +5,7 @@ $today = date('Y-m-d');
 
 // ---- KPI counts ----
 $tasks_due_today = (int) getRow(
-    'SELECT COUNT(*) as total FROM tasks
-     WHERE due_date = ? AND status != "done"' .
+    'SELECT COUNT(*) as total FROM tasks WHERE due_date = ? AND status != "done"' .
     (isManagerOrAdmin() ? '' : ' AND assignee_id = ' . (int) $me['id']),
     [$today]
 )['total'];
@@ -21,13 +20,11 @@ $pending_leaves = (int) getRow(
     (isManagerOrAdmin() ? '' : ' AND user_id = ' . (int) $me['id'])
 )['total'];
 
-// ---- Today attendance ----
 $today_record = getTodayRecord($me['id']);
 
 // ---- Status counts ----
-$statuses = ['todo', 'in_progress', 'in_review', 'blocked', 'done'];
 $status_counts = [];
-foreach ($statuses as $s) {
+foreach (['todo', 'in_progress', 'in_review', 'blocked', 'done'] as $s) {
     $row = getRow(
         'SELECT COUNT(*) as total FROM tasks WHERE status = ?' .
         (isManagerOrAdmin() ? '' : ' AND assignee_id = ' . (int) $me['id']),
@@ -37,11 +34,8 @@ foreach ($statuses as $s) {
 }
 
 // ---- Recent tasks ----
-$sql = 'SELECT t.*, u.name AS assignee_name, p.name AS project_name
-        FROM tasks t
-        LEFT JOIN users u ON t.assignee_id = u.id
-        LEFT JOIN projects p ON t.project_id = p.id';
-
+$sql = 'SELECT t.*, u.name AS assignee_name FROM tasks t
+        LEFT JOIN users u ON t.assignee_id = u.id';
 if (!isManagerOrAdmin()) {
     $sql .= ' WHERE t.assignee_id = ' . (int) $me['id'];
 }
@@ -49,7 +43,6 @@ $sql .= ' ORDER BY t.created_at DESC LIMIT 8';
 $recent_tasks = getRows($sql);
 ?>
 
-<!-- Heading -->
 <div class="mb-6">
     <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
     <p class="text-sm text-gray-500 mt-1">
@@ -59,28 +52,24 @@ $recent_tasks = getRows($sql);
 
 <!-- KPI Cards -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-
     <div class="bg-white rounded-xl border border-gray-200 p-5">
         <p class="text-xs text-gray-500 uppercase font-medium">Tasks due today</p>
         <p class="text-3xl font-bold text-gray-900 mt-1">
             <?= $tasks_due_today ?>
         </p>
     </div>
-
     <div class="bg-white rounded-xl border border-gray-200 p-5">
         <p class="text-xs text-gray-500 uppercase font-medium">Open tasks</p>
         <p class="text-3xl font-bold text-gray-900 mt-1">
             <?= $open_tasks ?>
         </p>
     </div>
-
     <div class="bg-white rounded-xl border border-gray-200 p-5">
         <p class="text-xs text-gray-500 uppercase font-medium">Pending leaves</p>
         <p class="text-3xl font-bold text-gray-900 mt-1">
             <?= $pending_leaves ?>
         </p>
     </div>
-
     <div class="bg-white rounded-xl border border-gray-200 p-5">
         <p class="text-xs text-gray-500 uppercase font-medium">Today attendance</p>
         <?php if ($today_record): ?>
@@ -102,10 +91,9 @@ $recent_tasks = getRows($sql);
             </a>
         <?php endif; ?>
     </div>
-
 </div>
 
-<!-- Status breakdown -->
+<!-- Status counts -->
 <div class="bg-white rounded-xl border border-gray-200 p-5 mb-8">
     <h2 class="text-sm font-semibold text-gray-700 mb-4">Tasks by status</h2>
     <div class="grid grid-cols-5 gap-3">
@@ -182,4 +170,4 @@ $recent_tasks = getRows($sql);
             </a>
         <?php endforeach; ?>
     </div>
-</div> 
+</div>

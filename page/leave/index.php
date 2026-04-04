@@ -3,7 +3,6 @@ $page_title = 'Leave Requests';
 $me = loggedInUser();
 $errors = [];
 
-// ---- Submit leave request ----
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verifyCsrf();
 
@@ -43,10 +42,7 @@ $my_requests = getMyLeaves($me['id']);
 <?php if ($errors): ?>
     <div class="mb-4 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">
         <?php foreach ($errors as $err): ?>
-            <p>
-                <?= e($err) ?>
-            </p>
-        <?php endforeach; ?>
+            <p><?= e($err) ?></p><?php endforeach; ?>
     </div>
 <?php endif; ?>
 
@@ -57,19 +53,15 @@ $my_requests = getMyLeaves($me['id']);
         <h2 class="text-sm font-semibold text-gray-700 mb-4">New request</h2>
         <form method="POST" action="./?page=leave/index" class="space-y-4">
             <?= csrfField() ?>
-
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
                 <select name="type" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm
                                focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="annual" <?= (($_POST['type'] ?? '') === 'annual') ? 'selected' : '' ?>>Annual leave
-                    </option>
+                    <option value="annual" <?= (($_POST['type'] ?? '') === 'annual') ? 'selected' : '' ?>>Annual leave</option>
                     <option value="sick" <?= (($_POST['type'] ?? '') === 'sick') ? 'selected' : '' ?>>Sick leave</option>
-                    <option value="unpaid" <?= (($_POST['type'] ?? '') === 'unpaid') ? 'selected' : '' ?>>Unpaid leave
-                    </option>
+                    <option value="unpaid" <?= (($_POST['type'] ?? '') === 'unpaid') ? 'selected' : '' ?>>Unpaid leave</option>
                 </select>
             </div>
-
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">From</label>
@@ -82,14 +74,12 @@ $my_requests = getMyLeaves($me['id']);
                                   focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
             </div>
-
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Reason</label>
                 <textarea name="reason" rows="3" required
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm
                                  focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"><?= e($_POST['reason'] ?? '') ?></textarea>
             </div>
-
             <button type="submit" class="w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white
                            text-sm font-medium rounded-lg">
                 Submit request
@@ -97,7 +87,7 @@ $my_requests = getMyLeaves($me['id']);
         </form>
     </div>
 
-    <!-- My requests list -->
+    <!-- My requests -->
     <div class="lg:col-span-2">
         <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
             <div class="px-5 py-4 border-b border-gray-100">
@@ -116,19 +106,14 @@ $my_requests = getMyLeaves($me['id']);
                                 <p class="text-sm font-medium text-gray-800">
                                     <?= ucfirst($r['type']) ?> leave
                                     <span class="font-normal text-gray-500">
-                                        ·
-                                        <?= $days ?> day
-                                        <?= $days > 1 ? 's' : '' ?>
+                                        · <?= $days ?> day<?= $days > 1 ? 's' : '' ?>
                                     </span>
                                 </p>
                                 <p class="text-xs text-gray-500 mt-0.5">
                                     <?= date('M j', strtotime($r['start_date'])) ?>
-                                    –
-                                    <?= date('M j, Y', strtotime($r['end_date'])) ?>
+                                    – <?= date('M j, Y', strtotime($r['end_date'])) ?>
                                 </p>
-                                <p class="text-xs text-gray-400 mt-1">
-                                    <?= e($r['reason']) ?>
-                                </p>
+                                <p class="text-xs text-gray-400 mt-1"><?= e($r['reason']) ?></p>
                             </div>
                             <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs
                                      font-medium flex-shrink-0 <?= leaveBadge($r['status']) ?>">

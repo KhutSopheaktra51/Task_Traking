@@ -10,9 +10,7 @@
 
 <body class="bg-gray-50 min-h-screen">
     <div class="min-h-screen flex items-center justify-center py-12 px-4">
-
         <?php include __DIR__ . '/../page/' . $page . '.php'; ?>
-
     </div>
 </body>
 

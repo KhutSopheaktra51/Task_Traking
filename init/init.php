@@ -1,11 +1,11 @@
 <?php
 
-// ---- Set timezone ----
+// ---- Timezone ----
 date_default_timezone_set('Asia/Phnom_Penh');
 
 // ---- Start session ----
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();    
+    session_start();
 }
 
 // ---- Clean output to prevent XSS ----
@@ -14,7 +14,7 @@ function e($value)
     return htmlspecialchars((string) ($value ?? ''), ENT_QUOTES, 'UTF-8');
 }
 
-// ---- Redirect to another page ----
+// ---- Redirect ----
 function redirect($url)
 {
     header('Location: ' . $url);
@@ -35,7 +35,7 @@ function getFlash($type)
     return $msg;
 }
 
-// ---- Generate CSRF token ----
+// ---- CSRF token ----
 function csrfToken()
 {
     if (empty($_SESSION['csrf_token'])) {
@@ -44,22 +44,22 @@ function csrfToken()
     return $_SESSION['csrf_token'];
 }
 
-// ---- Output hidden CSRF input ----
+// ---- CSRF hidden field ----
 function csrfField()
 {
     return '<input type="hidden" name="csrf_token" value="' . csrfToken() . '">';
 }
 
-// ---- Check CSRF on form submit ----
+// ---- Check CSRF ----
 function verifyCsrf()
 {
     $token = $_POST['csrf_token'] ?? '';
     if (!hash_equals(csrfToken(), $token)) {
-        die('Security check failed. Please go back and try again.');
+        die('Security check failed.');
     }
 }
 
-// ---- Get first 2 letters of name for avatar ----
+// ---- Get initials from name ----
 function getInitials($name)
 {
     $parts = explode(' ', trim($name));
@@ -68,7 +68,7 @@ function getInitials($name)
     return $first . $last;
 }
 
-// ---- Show time like "2h ago" ----
+// ---- Time ago ----
 function timeAgo($datetime)
 {
     $seconds = time() - strtotime($datetime);
@@ -81,7 +81,7 @@ function timeAgo($datetime)
     return floor($seconds / 86400) . 'd ago';
 }
 
-// ---- Convert status to readable text ----
+// ---- Status label ----
 function statusLabel($status)
 {
     $labels = [
@@ -94,7 +94,7 @@ function statusLabel($status)
     return $labels[$status] ?? ucfirst($status);
 }
 
-// ---- CSS class for priority badge ----
+// ---- Priority badge CSS ----
 function priorityBadge($priority)
 {
     $colors = [
@@ -106,7 +106,7 @@ function priorityBadge($priority)
     return $colors[$priority] ?? 'bg-gray-100 text-gray-700';
 }
 
-// ---- CSS class for status badge ----
+// ---- Status badge CSS ----
 function statusBadge($status)
 {
     $colors = [
@@ -119,7 +119,7 @@ function statusBadge($status)
     return $colors[$status] ?? 'bg-gray-100 text-gray-600';
 }
 
-// ---- CSS class for attendance badge ----
+// ---- Attendance badge CSS ----
 function attendanceBadge($status)
 {
     $colors = [
@@ -131,7 +131,7 @@ function attendanceBadge($status)
     return $colors[$status] ?? 'bg-gray-100 text-gray-600';
 }
 
-// ---- CSS class for leave badge ----
+// ---- Leave badge CSS ----
 function leaveBadge($status)
 {
     $colors = [

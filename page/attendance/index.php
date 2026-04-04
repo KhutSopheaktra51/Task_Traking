@@ -4,10 +4,9 @@ $me = loggedInUser();
 $today = date('Y-m-d');
 
 // ---- Check in ----
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'checkin') {
+if (isset($_POST['action']) && $_POST['action'] === 'checkin') {
     verifyCsrf();
-    $existing = getTodayRecord($me['id']);
-    if (!$existing) {
+    if (!getTodayRecord($me['id'])) {
         doCheckIn($me['id']);
         setFlash('success', 'Checked in at ' . date('H:i'));
     } else {
@@ -17,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'check
 }
 
 // ---- Check out ----
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'checkout') {
+if (isset($_POST['action']) && $_POST['action'] === 'checkout') {
     verifyCsrf();
     $record = getTodayRecord($me['id']);
     if ($record && !$record['check_out']) {
@@ -47,7 +46,6 @@ $week_days = getWeekDays($me['id']);
     </h2>
 
     <?php if ($today_record): ?>
-        <!-- Show check-in info -->
         <div class="flex items-center gap-8 mb-4">
             <div class="text-center">
                 <p class="text-xs text-gray-400 mb-1">Checked in</p>
@@ -73,8 +71,8 @@ $week_days = getWeekDays($me['id']);
             <form method="POST" action="./?page=attendance/index" class="mt-4">
                 <?= csrfField() ?>
                 <input type="hidden" name="action" value="checkout">
-                <button type="submit" class="px-5 py-2.5 bg-gray-800 hover:bg-gray-900 text-white
-                           text-sm font-medium rounded-lg">
+                <button type="submit"
+                    class="px-5 py-2.5 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-lg">
                     Check out now
                 </button>
             </form>
@@ -85,8 +83,8 @@ $week_days = getWeekDays($me['id']);
         <form method="POST" action="./?page=attendance/index">
             <?= csrfField() ?>
             <input type="hidden" name="action" value="checkin">
-            <button type="submit" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white
-                           text-sm font-medium rounded-lg">
+            <button type="submit"
+                class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg">
                 Check in now —
                 <?= date('H:i') ?>
             </button>
@@ -94,13 +92,15 @@ $week_days = getWeekDays($me['id']);
     <?php endif; ?>
 </div>
 
-<!-- Weekly calendar -->
+<!-- Weekly grid -->
 <div class="bg-white rounded-xl border border-gray-200 p-5">
     <h2 class="text-sm font-semibold text-gray-700 mb-4">This week</h2>
     <div class="grid grid-cols-7 gap-2">
-        <?php foreach ($week_days as $day): ?>
+        <?php foreach ($week_days as $day):
+            $is_today = $day['date'] === $today;
+            ?>
             <div class="rounded-lg border p-2 text-center
-                    <?= $day['date'] === $today ? 'border-indigo-300 bg-indigo-50' : 'border-gray-100' ?>">
+                    <?= $is_today ? 'border-indigo-300 bg-indigo-50' : 'border-gray-100' ?>">
                 <p class="text-xs font-medium text-gray-500">
                     <?= $day['label'] ?>
                 </p>

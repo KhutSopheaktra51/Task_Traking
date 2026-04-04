@@ -27,22 +27,21 @@ if (isset($_GET['export'])) {
 
 <div class="mb-6 flex items-center justify-between">
     <h1 class="text-2xl font-semibold text-gray-900">All attendance</h1>
-    <a href="./?page=attendance/admin&export=1&<?= http_build_query(['date' => $filter_date, 'user_id' => $filter_user]) ?>"
+    <a href="./?page=attendance/admin&export=1&<?= http_build_query(array_filter(['date' => $filter_date, 'user_id' => $filter_user])) ?>"
         class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50">
         Export CSV
     </a>
 </div>
 
-<!-- Filters -->
 <form method="GET" action="./" class="flex flex-wrap gap-3 mb-5 bg-white rounded-xl border border-gray-200 p-4">
     <input type="hidden" name="page" value="attendance/admin">
-    <input type="date" name="date" value="<?= e($filter_date ?? '') ?>"
-        class="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-    <select name="user_id"
-        class="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    <input type="date" name="date" value="<?= e($filter_date ?? '') ?>" class="px-3 py-2 text-sm border border-gray-300 rounded-lg
+                  focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    <select name="user_id" class="px-3 py-2 text-sm border border-gray-300 rounded-lg
+                   focus:outline-none focus:ring-2 focus:ring-indigo-500">
         <option value="">All users</option>
         <?php foreach ($users as $u): ?>
-            <option value="<?= $u['id'] ?>" <?= $filter_user == $u['id'] ? 'selected' : '' ?>>
+            <option value="<?= $u['id'] ?>" <?= ($filter_user == $u['id']) ? 'selected' : '' ?>>
                 <?= e($u['name']) ?>
             </option>
         <?php endforeach; ?>
@@ -53,7 +52,6 @@ if (isset($_GET['export'])) {
     <a href="./?page=attendance/admin" class="px-4 py-2 text-gray-500 text-sm">Clear</a>
 </form>
 
-<!-- Table -->
 <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
     <table class="w-full text-sm">
         <thead class="bg-gray-50 border-b border-gray-200">
@@ -80,10 +78,10 @@ if (isset($_GET['export'])) {
                         <?= date('M j, Y', strtotime($r['date'])) ?>
                     </td>
                     <td class="px-5 py-3 text-gray-600">
-                        <?= $r['check_in'] ? e(substr($r['check_in'], 0, 5)) : '—' ?>
+                        <?= $r['check_in'] ? substr($r['check_in'], 0, 5) : '—' ?>
                     </td>
                     <td class="px-5 py-3 text-gray-600">
-                        <?= $r['check_out'] ? e(substr($r['check_out'], 0, 5)) : '—' ?>
+                        <?= $r['check_out'] ? substr($r['check_out'], 0, 5) : '—' ?>
                     </td>
                     <td class="px-5 py-3">
                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium

@@ -8,55 +8,47 @@ require_once __DIR__ . '/init/func/task.func.php';
 require_once __DIR__ . '/init/func/attendance.func.php';
 require_once __DIR__ . '/init/func/leave.func.php';
 
-$user = loggedInUser();
+$user    = loggedInUser();
 $isAdmin = isAdmin();
+$page    = $_GET['page'] ?? 'dashboard';
 
+// ---- All available pages ----
 $all_pages = [
-    'login',
-    'register',
-    'logout',
+    'login', 'logout',
     'dashboard',
-    'task/list',
-    'task/create',
-    'task/show',
-    'task/edit',
-    'task/delete',
-    'task/update_status',
-    'attendance/index',
-    'attendance/history',
-    'attendance/admin',
-    'leave/index',
-    'leave/manage',
-    'leave/action',
+    'task/list', 'task/create', 'task/show',
+    'task/edit', 'task/delete', 'task/update_status',
+    'attendance/index', 'attendance/history', 'attendance/admin',
+    'leave/index', 'leave/manage', 'leave/action',
     'report/index',
     'user/list',
 ];
 
+// ---- Pages that need login ----
 $need_login = [
     'dashboard',
-    'task/list',
-    'task/create',
-    'task/show',
-    'task/edit',
-    'task/delete',
-    'task/update_status',
-    'attendance/index',
-    'attendance/history',
-    'attendance/admin',
-    'leave/index',
-    'leave/manage',
-    'leave/action',
+    'task/list', 'task/create', 'task/show',
+    'task/edit', 'task/delete', 'task/update_status',
+    'attendance/index', 'attendance/history', 'attendance/admin',
+    'leave/index', 'leave/manage', 'leave/action',
     'report/index',
     'user/list',
 ];
 
-$guest_only = ['login', 'register'];
-$admin_only = ['user/list'];
-$manager_only = ['attendance/admin', 'leave/manage', 'leave/action', 'report/index'];
+// ---- Pages for guests only ----
+$guest_only   = ['login'];
 
-$page = $_GET['page'] ?? 'dashboard';
+// ---- Pages for admin only ----
+$admin_only   = ['user/list'];
 
-// ---- Redirect logged in user away from login/register ----
+// ---- Pages for manager and admin only ----
+$manager_only = [
+    'attendance/admin',
+    'leave/manage', 'leave/action',
+    'report/index',
+];
+
+// ---- Redirect logged in user away from login ----
 if (in_array($page, $guest_only) && !empty($user)) {
     redirect('./?page=dashboard');
 }
@@ -66,7 +58,7 @@ if (in_array($page, $need_login) && empty($user)) {
     redirect('./?page=login');
 }
 
-// ---- Block non-admin ----
+// ---- Block non admin ----
 if (in_array($page, $admin_only) && !$isAdmin) {
     redirect('./?page=dashboard');
 }
@@ -75,14 +67,14 @@ if (in_array($page, $admin_only) && !$isAdmin) {
 if (in_array($page, $manager_only) && !isManagerOrAdmin()) {
     redirect('./?page=dashboard');
 }
+
+// ---- Guest pages — centered layout ----
 if (in_array($page, $guest_only)) {
     include __DIR__ . '/include/auth.inc.php';
     exit;
 }
 
-// ====================================================
-// LOGGED IN PAGES — with sidebar layout
-// ====================================================
+// ---- Logged in pages — sidebar layout ----
 include __DIR__ . '/include/header.inc.php';
 include __DIR__ . '/include/navbar.inc.php';
 
