@@ -5,6 +5,7 @@ $month      = $_GET['month'] ?? date('Y-m');
 
 // ---- CSV export ----
 if (isset($_GET['export'])) {
+    while (ob_get_level()) ob_end_clean();
     $all_users = getAllUsers();
     header('Content-Type: text/csv');
     header('Content-Disposition: attachment; filename=report_' . $month . '.csv');

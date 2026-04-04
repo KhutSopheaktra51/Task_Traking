@@ -30,6 +30,7 @@ function doCheckOut($record_id)
     );
 }
 
+
 // ---- Get user attendance history ----
 function getUserAttendance($user_id)
 {

@@ -7,6 +7,7 @@ $users = getAllUsers();
 
 // ---- CSV export ----
 if (isset($_GET['export'])) {
+    while (ob_get_level()) ob_end_clean();
     header('Content-Type: text/csv');
     header('Content-Disposition: attachment; filename=attendance_' . date('Y-m-d') . '.csv');
     $out = fopen('php://output', 'w');
